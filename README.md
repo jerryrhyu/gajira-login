@@ -12,6 +12,10 @@ This is required by other actions like:
 - [`TODO`](https://github.com/marketplace/actions/jira-todo) - Create a Jira issue for each TODO comment in committed code
 - [`CLI`](https://github.com/marketplace/actions/jira-cli) - Wrapped [go-jira](https://github.com/Netflix-Skunkworks/go-jira) CLI for common Jira actions
 
+## Server branch
+
+This branch has been forked from the official Atlassian repository to support Jira server (on-premise) installs.
+
 ## Usage
 An example workflow to create a Jira issue for each `//TODO` in code:
 
