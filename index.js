@@ -1,10 +1,5 @@
-const fs = require('fs')
-const path = require('path')
-const YAML = require('yaml')
+const core = require('@actions/core')
 
-const cliConfigPath = `${process.env.HOME}/.jira.d/config.yml`
-const cliCredentialsPath = `${process.env.HOME}/.jira.d/credentials`
-const configPath = `${process.env.HOME}/jira/config.yml`
 
 const Action = require('./action')
 
@@ -23,33 +18,16 @@ async function exec () {
       email: process.env.JIRA_USER_EMAIL,
     }
 
-    process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = 0;
+    process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = 0
 
     const result = await new Action({
       githubEvent,
-      argv: {},
+      argv: parseArgs(),
       config,
     }).execute()
 
     if (result) {
-      const extendedConfig = Object.assign({}, config, result)
-
-      if (!fs.existsSync(configPath)) {
-        fs.mkdirSync(path.dirname(configPath), { recursive: true })
-      }
-
-      fs.writeFileSync(configPath, YAML.stringify(extendedConfig))
-
-      if (!fs.existsSync(cliConfigPath)) {
-        fs.mkdirSync(path.dirname(cliConfigPath), { recursive: true })
-      }
-
-      fs.writeFileSync(cliConfigPath, YAML.stringify({
-        endpoint: result.baseUrl,
-        login: result.email,
-      }))
-
-      fs.writeFileSync(cliCredentialsPath, `JIRA_API_TOKEN=${result.token}`)
+      core.info('Add jira comment successfully!')
 
       return
     }
@@ -59,6 +37,13 @@ async function exec () {
   } catch (error) {
     console.error(error)
     process.exit(1)
+  }
+}
+
+function parseArgs () {
+  return {
+    issue: core.getInput('issue'),
+    comment: core.getInput('comment'),
   }
 }
 

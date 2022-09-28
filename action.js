@@ -14,10 +14,12 @@ module.exports = class {
   }
 
   async execute () {
-    const myself = await this.Jira.getMyself()
+    const issueId = this.argv.issue
+    const { comment } = this.argv
 
-    console.log(`Logged in as: ${myself.name}`)
+    console.log(`Adding comment to ${issueId}: \n${comment}`)
+    await this.Jira.addComment(issueId, { body: comment })
 
-    return this.config
+    return {}
   }
 }
