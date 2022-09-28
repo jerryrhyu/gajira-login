@@ -23,6 +23,8 @@ async function exec () {
       email: process.env.JIRA_USER_EMAIL,
     }
 
+    process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = 0;
+
     const result = await new Action({
       githubEvent,
       argv: {},
