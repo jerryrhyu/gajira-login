@@ -11,6 +11,15 @@ class Jira {
     this.email = email
   }
 
+  async addComment (issueId, data) {
+    return this.fetch('addComment', {
+      pathname: `/rest/api/2/issue/${issueId}/comment`,
+    }, {
+      method: 'POST',
+      body: data,
+    })
+  }
+
   async getMyself () {
     return this.fetch('getMyself',
       { pathname: '/rest/api/2/myself' }, {
